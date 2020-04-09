@@ -1,0 +1,39 @@
+{
+  "name": "fxmath",
+  "version": "0.1.0",
+  "description": "some math tools for building games and experimental stuff",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "dev": "webpack -w",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/flexelektro/fxmath.git"
+  },
+  "keywords": [
+    "vector",
+    "math",
+    "2d",
+    "typescript",
+    "game-dev"
+  ],
+  "author": "felix deimling (https://felixdeimling.de)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/flexelektro/fxmath/issues"
+  },
+  "homepage": "https://github.com/flexelektro/fxmath#readme",
+  "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@babel/preset-env": "^7.9.5",
+    "@babel/preset-typescript": "^7.9.0",
+    "babel-jest": "^25.3.0",
+    "jest": "^25.3.0",
+    "ts-loader": "^6.2.2",
+    "typescript": "^3.8.3",
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11"
+  }
+}

@@ -5,8 +5,12 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "dev": "webpack -w",
-    "test": "jest"
+    "dev": "webpack -w --config ./webpack-configs/webpack-dev.config.js",
+    "production": "webpack --config ./webpack-configs/webpack-prod.config.js",
+    "test": "jest",
+    "visual": "npm-run-all -p visualdev servevisual",
+    "visualdev": "webpack -w --config ./webpack-configs/webpack-visual.config.js",
+    "servevisual": "live-server --open=./visualtest/index.html"
   },
   "repository": {
     "type": "git",
@@ -31,7 +35,11 @@
     "@babel/preset-typescript": "^7.9.0",
     "babel-jest": "^25.3.0",
     "jest": "^25.3.0",
+    "live-server": "^1.2.1",
+    "np": "^6.2.0",
+    "npm-run-all": "^4.1.5",
     "ts-loader": "^6.2.2",
+    "two.js": "^0.7.0-stable.1",
     "typescript": "^3.8.3",
     "webpack": "^4.42.1",
     "webpack-cli": "^3.3.11"

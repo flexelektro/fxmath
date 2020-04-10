@@ -54,12 +54,17 @@ class V2 {
         return V2.multiply(v, 1 / scalar);
     }
 
-    public static dotprod(v1: V2, v2: V2): V2 {
-        return new V2(v1.x * v2.y, v1.y * v2.y);
+    public static dotprod(v1: V2, v2: V2): number {
+        return v1.x * v2.x + v1.y * v2.y;
     }
 
     public static crossprod(v1: V2, v2: V2): number {
         return v1.x * v2.y - v1.y * v2.x;
+    }
+
+    public static projectionFromTo(v1: V2, v2: V2): V2 {
+        let unitVector = V2.divide(v2,v2.magnitude);
+        return V2.multiply(unitVector,V2.dotprod(v1,unitVector));
     }
 
 
@@ -116,10 +121,8 @@ class V2 {
         return this.multiply(1 / scalar);
     }
 
-    public dotprod(v: V2): this {
-        this.x *= v.x;
-        this.y *= v.y;
-        return this;
+    public dotprod(v: V2): number {
+        return this.x * v.x + this.y * v.y;
     }
 
     public crossprod(v: V2): number {

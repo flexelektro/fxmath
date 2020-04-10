@@ -1,4 +1,4 @@
-import V2 from "./v2"
+import V2 from "../src/v2"
 
 test('the constructor should work', () => {
     expect(

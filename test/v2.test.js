@@ -1,4 +1,5 @@
 import V2 from "../src/v2"
+import {expect} from "@jest/globals";
 
 test('the constructor should work', () => {
     expect(
@@ -24,12 +25,35 @@ test('V2.clone() should work', () => {
     ).not.toBe(v1)
 })
 
-test("createByMagnitudeAndAngleShouldWork",() => {
+describe("createByMagnitudeAndAngleShouldWork",() => {
+    test("0 grad",() => {
 
-    const v = V2.createByMagnitudeAndAngle(2,Math.PI / 2);
-    console.log(v);
+        const v = V2.createByMagnitudeAndAngle(2,0);
+        console.log(v);
+        expect(v.y).toBeCloseTo(0);
+        expect(v.x).toBeCloseTo(2);
 
-    expect(v.y).toBeCloseTo(2);
-    expect(v.x).toBeCloseTo(0);
+    })
 
+    test("45 deg",() => {
+        const v = V2.createByMagnitudeAndAngle(1,Math.PI * 0.25);
+        expect(v.y).toBeCloseTo(v.x);
+    })
+
+    test("90 grad",() => {
+
+        const v = V2.createByMagnitudeAndAngle(2,Math.PI / 2);
+        expect(v.y).toBeCloseTo(2);
+        expect(v.x).toBeCloseTo(0);
+
+    })
+
+    test("180 grad",() => {
+
+        const v = V2.createByMagnitudeAndAngle(2,Math.PI);
+        expect(v.x).toBeCloseTo(-2);
+        expect(v.y).toBeCloseTo(0);
+
+    })
 })
+

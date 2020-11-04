@@ -1,6 +1,6 @@
 {
   "name": "fxmath",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "some math tools for building games and experimental stuff",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

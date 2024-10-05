@@ -1,4 +1,4 @@
-import {V2} from 'imports/libs/fxmath/index';
+import V2,{v2} from './v2';
 
 declare function fxrand(): number;
 
@@ -7,7 +7,7 @@ export type IPos = {
   y: number;
 }
 
-const {PI,log,log10,sin,cos,tan,atan,atan2,atanh,random,floor,ceil,sqrt,round, exp,pow} = Math;
+const {PI,log,sin,cos,tan,atan,atan2,random,floor,ceil,sqrt,round, exp,pow} = Math;
 const PI2 = PI * 2;
 
 const map = (n: number, start: number, stop: number, targetStart: number, targetStop: number) => {
@@ -246,7 +246,7 @@ function shuffleArray(array:any[]) {
 export {resetRNDHASH, map, lerp, mix, dist, rnd,RND, random2, fract, 
   clamp, smoothstep,quinticinterpol, weightedRandomLn, pickRandomFromArray, pickRandom,
   createPseudoPoissonDistribution,randomWeightedFromArray,
-  PI,PI2,log,sin,cos,tan,atan2,atan,random,floor,ceil,sqrt,swapVals,round,exp,pow,atanh,log10,rndInt,isEven,rand_box_muller,
+  PI,PI2,log,sin,cos,tan,atan2,atan,random,floor,ceil,sqrt,swapVals,round,exp,pow,rndInt,isEven,rand_box_muller,
     sawTooth,make2dArray,make2dSquareArray,modWrap,shuffleArray
 }
 

@@ -1,0 +1,45 @@
+import V2 from './v2';
+export type IPos = {
+    x: number;
+    y: number;
+};
+declare const PI: number, log: (x: number) => number, sin: (x: number) => number, cos: (x: number) => number, tan: (x: number) => number, atan: (x: number) => number, atan2: (y: number, x: number) => number, random: () => number, floor: (x: number) => number, ceil: (x: number) => number, sqrt: (x: number) => number, round: (x: number) => number, exp: (x: number) => number, pow: (x: number, y: number) => number;
+declare const PI2: number;
+declare const map: (n: number, start: number, stop: number, targetStart: number, targetStop: number) => number;
+declare const lerp: (start: number, stop: number, amt: number) => number;
+declare const mix: (start: number, stop: number, amt: number) => number;
+declare const dist: (ax: number, ay: number, bx: number, by: number) => number;
+declare const rnd: (a: number, b: number, mathrandom?: boolean) => number;
+declare const rndInt: (low: number, high: number) => number;
+declare const random2: (a: number, seed?: number) => number;
+declare const resetRNDHASH: (hash: number) => void;
+declare const RND: () => number;
+declare const weightedRandomLn: (rand0to1: number, zeroHasHeigherProb?: boolean) => number;
+declare const rand_box_muller: () => number;
+declare const pickRandom: (...args: any[]) => any;
+declare const pickRandomFromArray: <T>(arr: T[], splice?: boolean) => T;
+declare const fract: (x: number) => number;
+declare const clamp: (x: number, min?: number, max?: number) => number;
+declare const modWrap: (x: number, min?: number, max?: number) => number;
+declare const smoothstep: (edge0: number, edge1: number, x: number) => number;
+declare const quinticinterpol: (edge0: number, edge1: number, x0: number) => number;
+declare const createPseudoPoissonDistribution: (OPT: {
+    W: number;
+    H: number;
+    size: number;
+    perc: number;
+    hasShiftRow: boolean;
+}) => V2[][];
+declare const randomWeightedFromArray: <T>(arr: {
+    value: T;
+    prob: number;
+    start?: number;
+    end?: number;
+}[]) => T;
+declare const swapVals: (a: number, b: number) => any[];
+declare const isEven: (n: number) => boolean;
+declare function sawTooth(_x: number, A: number): number;
+declare function make2dSquareArray(MAP_DIMENSION: number): any[][];
+declare function make2dArray(MAP_DIMENSION_Y: number, MAP_DIMENSION_X: number): any[][];
+declare function shuffleArray(array: any[]): any[];
+export { resetRNDHASH, map, lerp, mix, dist, rnd, RND, random2, fract, clamp, smoothstep, quinticinterpol, weightedRandomLn, pickRandomFromArray, pickRandom, createPseudoPoissonDistribution, randomWeightedFromArray, PI, PI2, log, sin, cos, tan, atan2, atan, random, floor, ceil, sqrt, swapVals, round, exp, pow, rndInt, isEven, rand_box_muller, sawTooth, make2dArray, make2dSquareArray, modWrap, shuffleArray };

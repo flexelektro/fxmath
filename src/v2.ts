@@ -1,4 +1,4 @@
-import {rnd} from "@/fxmath/common";
+import {rnd} from "./common";
 
 const lerp = (start: number, stop: number, amt: number) => {
   return amt * (stop - start) + start;

@@ -1,4 +1,4 @@
-import {atan2, lerp} from 'imports/libs/fxmath/common'
+import {atan2, lerp} from './common'
 
 export const v3 = (x: number = 0, y: number = 0, z: number = 0) => {
     return new V3(x, y, z);

@@ -1,4 +1,4 @@
-import { mix, random, smoothstep, fract, random2 } from 'imports/libs/fxmath/common';
+import { mix, random, smoothstep, fract, random2 } from './common';
 
 
 interface INoiseOptions{

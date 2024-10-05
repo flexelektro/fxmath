@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.v2 = void 0;
+exports.V2 = exports.v2 = void 0;
 const common_1 = require("./common");
 const lerp = (start, stop, amt) => {
     return amt * (stop - start) + start;
@@ -298,5 +298,5 @@ class V2 {
         return V2.isPointInPolygon(this, poly);
     }
 }
-exports.default = V2;
+exports.V2 = V2;
 //# sourceMappingURL=v2.js.map

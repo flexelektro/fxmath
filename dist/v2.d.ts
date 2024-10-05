@@ -65,5 +65,4 @@ declare class V2 {
     floorValues(): this;
     isInPolygon(poly: V2[]): boolean;
 }
-export { v2 };
-export default V2;
+export { v2, V2 };

@@ -1,4 +1,4 @@
-import V2,{v2} from './v2';
+import {V2,v2} from './v2';
 
 declare function fxrand(): number;
 

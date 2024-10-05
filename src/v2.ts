@@ -382,5 +382,5 @@ class V2{
 
 }
 
-export { v2 }
-export default V2
+export { v2,V2 }
+

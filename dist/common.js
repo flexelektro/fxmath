@@ -153,7 +153,7 @@ const createPseudoPoissonDistribution = (OPT) => {
             let dr = weightedRandomLn(_rnd2) * perc / 100 * size;
             let dx = dr * Math.cos(phi);
             let dy = dr * Math.sin(phi);
-            row.push(v2_1.default.create(j * size + size / 2 + shiftrow + dx, i * size + size / 2 + dy));
+            row.push(v2_1.V2.create(j * size + size / 2 + shiftrow + dx, i * size + size / 2 + dy));
         }
         dots.push(row);
     }

@@ -1,4 +1,4 @@
-import V2 from './v2';
+import { V2 } from './v2';
 export type IPos = {
     x: number;
     y: number;

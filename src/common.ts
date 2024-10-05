@@ -52,7 +52,7 @@ const mulberry32RND = (a:number) => {
 }
 
 // @ts-ignore
-let mullBerryRND = mulberry32RND(window.fxrand ? fxrand()*10000 : Math.random()*10000)
+let mullBerryRND = mulberry32RND((typeof window !== "undefined" && window.fxrand) ? fxrand()*10000 : Math.random()*10000)
 
 const resetRNDHASH = (hash:number) => {
   mullBerryRND = mulberry32RND(hash)

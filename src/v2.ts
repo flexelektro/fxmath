@@ -1,8 +1,5 @@
-import {rnd} from "./common";
+import {rnd,lerp} from "./common";
 
-const lerp = (start: number, stop: number, amt: number) => {
-  return amt * (stop - start) + start;
-}
 
 const v2 = (x: number, y: number) => {
   return new V2(x, y)
@@ -62,7 +59,7 @@ class V2{
     return v2(x,y)
   }
 
-  public static isPointInPolygon(p:V2,poly:V2[]){
+  public static isPointInPolygon(p:V2,poly:V2[]):boolean{
     let len = poly.length;
     let inside = false;
     for (let i = 0, j = len - 1 ; i < len; j = i++) {

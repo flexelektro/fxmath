@@ -1,5 +1,5 @@
 {
-  "name": "fxmath",
+  "name": "@fdx/fxmath",
   "version": "0.0.1",
   "description": "A helper library for vector math and generative art",
   "main": "dist/index.js",

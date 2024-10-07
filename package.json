@@ -1,12 +1,12 @@
 {
   "name": "@fdx/fxmath",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A helper library for vector math and generative art",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "rm -rf ./dist && tsc && node build.js",
-    "test": "jest"
+    "test": ""
   },
   "keywords": [
     "vector",

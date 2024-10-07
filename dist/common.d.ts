@@ -36,7 +36,7 @@ declare const randomWeightedFromArray: <T>(arr: {
     start?: number;
     end?: number;
 }[]) => T;
-declare const swapVals: (a: number, b: number) => any[];
+declare const swapVals: (a: number, b: number) => never[];
 declare const isEven: (n: number) => boolean;
 declare function sawTooth(_x: number, A: number): number;
 declare function make2dSquareArray(MAP_DIMENSION: number): any[][];

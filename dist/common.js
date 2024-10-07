@@ -62,7 +62,11 @@ const mulberry32RND = (a) => {
     };
 };
 // @ts-ignore
-let mullBerryRND = mulberry32RND(window.fxrand ? fxrand() * 10000 : Math.random() * 10000);
+if (window === null || window === void 0 ? void 0 : window.$fx) {
+    console.log("fxhash-api detected", window === null || window === void 0 ? void 0 : window.$fx.hash, window === null || window === void 0 ? void 0 : window.$fx.rand());
+}
+// @ts-ignore
+let mullBerryRND = mulberry32RND((typeof window !== "undefined" && (window === null || window === void 0 ? void 0 : window.$fx)) ? $fx.rand() * 10000 : Math.random() * 10000);
 const resetRNDHASH = (hash) => {
     mullBerryRND = mulberry32RND(hash);
 };
@@ -147,8 +151,8 @@ const createPseudoPoissonDistribution = (OPT) => {
         let row = [];
         for (let j = 0; j < anzX; j++) {
             let shiftrow = hasShiftRow ? (i % 2 === 0 ? size / 2 : 0) : 0;
-            let _rnd = fxrand ? fxrand() : Math.random();
-            let _rnd2 = fxrand ? fxrand() : Math.random();
+            let _rnd = RND();
+            let _rnd2 = RND();
             let phi = _rnd * 2 * Math.PI;
             let dr = weightedRandomLn(_rnd2) * perc / 100 * size;
             let dx = dr * Math.cos(phi);

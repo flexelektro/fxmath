@@ -6,9 +6,10 @@
     "module": "commonjs",
     "declaration": true,
     "sourceMap": true,
-    "lib": ["es2015","es2020", "dom"],
+    "lib": ["es2020", "dom"],
     "baseUrl": ".",
     "strictNullChecks": true
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*"],
+    "exclude": ["node_modules","dist","src/__tests__"]
 }

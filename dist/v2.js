@@ -2,9 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.V2 = exports.v2 = void 0;
 const common_1 = require("./common");
-const lerp = (start, stop, amt) => {
-    return amt * (stop - start) + start;
-};
 const v2 = (x, y) => {
     return new V2(x, y);
 };
@@ -150,8 +147,8 @@ class V2 {
         return Math.abs(v1.x - v2.x) + Math.abs(v1.y - v2.y);
     }
     static lerp(v1, v2, amt) {
-        let x = lerp(v1.x, v2.x, amt);
-        let y = lerp(v1.y, v2.y, amt);
+        let x = (0, common_1.lerp)(v1.x, v2.x, amt);
+        let y = (0, common_1.lerp)(v1.y, v2.y, amt);
         return new V2(x, y);
     }
     clone() {
@@ -283,8 +280,8 @@ class V2 {
         return this;
     }
     lerp(v, amt) {
-        let x = lerp(this.x, v.x, amt);
-        let y = lerp(this.y, v.y, amt);
+        let x = (0, common_1.lerp)(this.x, v.x, amt);
+        let y = (0, common_1.lerp)(this.y, v.y, amt);
         this.x = x;
         this.y = y;
         return this;

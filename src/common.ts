@@ -1,6 +1,27 @@
 import {V2,v2} from './v2';
 
-declare function fxrand(): number;
+declare interface FxHashAPI {
+  hash: string;
+  rand: () => number;
+  minter: string;
+  randminter: () => number;
+  preview: () => void;
+  isPreview: boolean;
+  params: (definitions: any) => void;
+  getParam: (id: string) => any;
+  getParams: () => any;
+  getRawParam: (id: string) => any;
+  getRawParams: () => any;
+  getDefinitions: () => any;
+  features: (features: any) => void;
+  getFeature: (id: string) => any;
+  getFeatures: () => any;
+  stringifyParams: (definitions: any) => string;
+}
+
+declare interface Window {
+  $fx: FxHashAPI;
+}
 
 export type IPos = {
   x: number;
@@ -52,7 +73,9 @@ const mulberry32RND = (a:number) => {
 }
 
 // @ts-ignore
-let mullBerryRND = mulberry32RND((typeof window !== "undefined" && window.fxrand) ? fxrand()*10000 : Math.random()*10000)
+if(window?.$fx){console.log("fxhash-api detected",window?.$fx.hash,window?.$fx.rand())}
+// @ts-ignore
+let mullBerryRND = mulberry32RND((typeof window !== "undefined" && window?.$fx) ? $fx.rand()*10000 : Math.random()*10000)
 
 const resetRNDHASH = (hash:number) => {
   mullBerryRND = mulberry32RND(hash)
@@ -136,11 +159,11 @@ const createPseudoPoissonDistribution = (OPT: {W: number, H: number, size: numbe
   let anzY = Math.ceil(H / size);
 
   for(let i = 0; i < anzY; i++){
-    let row = [];
+    let row:V2[] = [];
     for(let j = 0; j < anzX; j++){
       let shiftrow = hasShiftRow ? (i % 2 === 0 ? size / 2 : 0) : 0;
-      let _rnd = fxrand ? fxrand() : Math.random();
-      let _rnd2 = fxrand ? fxrand() : Math.random();
+      let _rnd = RND();
+      let _rnd2 = RND();
       let phi = _rnd * 2 * Math.PI;
       let dr = weightedRandomLn(_rnd2) * perc / 100 * size;
       let dx = dr * Math.cos(phi);

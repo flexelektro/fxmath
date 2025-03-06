@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.modWrap = exports.rand_box_muller = exports.isEven = exports.rndInt = exports.pow = exports.exp = exports.round = exports.swapVals = exports.sqrt = exports.ceil = exports.floor = exports.random = exports.atan = exports.atan2 = exports.tan = exports.cos = exports.sin = exports.log = exports.PI2 = exports.PI = exports.randomWeightedFromArray = exports.createPseudoPoissonDistribution = exports.pickRandom = exports.pickRandomFromArray = exports.weightedRandomLn = exports.quinticinterpol = exports.smoothstep = exports.clamp = exports.fract = exports.random2 = exports.RND = exports.rnd = exports.dist = exports.mix = exports.lerp = exports.map = exports.resetRNDHASH = void 0;
+exports.makeFibonacci = exports.modWrap = exports.rand_box_muller = exports.isEven = exports.rndInt = exports.pow = exports.exp = exports.round = exports.swapVals = exports.sqrt = exports.ceil = exports.floor = exports.random = exports.atan = exports.atan2 = exports.tan = exports.cos = exports.sin = exports.log = exports.PI2 = exports.PI = exports.randomWeightedFromArray = exports.createPseudoPoissonDistribution = exports.pickRandom = exports.pickRandomFromArray = exports.weightedRandomLn = exports.quinticinterpol = exports.smoothstep = exports.clamp = exports.fract = exports.random2 = exports.RND = exports.rnd = exports.dist = exports.mix = exports.lerp = exports.map = exports.resetRNDHASH = void 0;
 exports.sawTooth = sawTooth;
 exports.make2dArray = make2dArray;
 exports.make2dSquareArray = make2dSquareArray;
@@ -23,6 +23,15 @@ exports.exp = exp;
 exports.pow = pow;
 const PI2 = PI * 2;
 exports.PI2 = PI2;
+const GOLDENRATIO = 1.61803398875;
+const makeFibonacci = (n) => {
+    let arr = [0, 1];
+    for (let i = 2; i < n; i++) {
+        arr.push(arr[i - 1] + arr[i - 2]);
+    }
+    return arr;
+};
+exports.makeFibonacci = makeFibonacci;
 const map = (n, start, stop, targetStart, targetStop) => {
     const newVal = targetStart + (n - start) / (stop - start) * (targetStop - targetStart);
     return newVal;

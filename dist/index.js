@@ -1,10 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.atan = exports.resetRNDHASH = exports.weightedRandomLn = exports.sawTooth = exports.PI = exports.make2dSquareArray = exports.make2dArray = exports.shuffleArray = exports.modWrap = exports.map = exports.pow = exports.exp = exports.round = exports.swapVals = exports.sqrt = exports.ceil = exports.floor = exports.random = exports.atan2 = exports.tan = exports.cos = exports.sin = exports.log = exports.PI2 = exports.RND = exports.random2 = exports.pickRandom = exports.dist = exports.mix = exports.lerp = exports.pickRandomFromArray = exports.randomWeightedFromArray = exports.createPseudoPoissonDistribution = exports.isEven = exports.rndInt = exports.rnd = exports.clamp = exports.fract = exports.smoothstep = exports.quinticinterpol = exports.v3 = exports.V3 = exports.v2 = exports.V2 = void 0;
+exports.atan = exports.resetRNDHASH = exports.weightedRandomLn = exports.sawTooth = exports.PI = exports.make2dSquareArray = exports.make2dArray = exports.shuffleArray = exports.modWrap = exports.map = exports.pow = exports.exp = exports.round = exports.swapVals = exports.sqrt = exports.ceil = exports.floor = exports.random = exports.atan2 = exports.tan = exports.cos = exports.sin = exports.log = exports.PI2 = exports.RND = exports.random2 = exports.pickRandom = exports.dist = exports.mix = exports.lerp = exports.pickRandomFromArray = exports.randomWeightedFromArray = exports.createPseudoPoissonDistribution = exports.isEven = exports.rndInt = exports.rnd = exports.clamp = exports.fract = exports.smoothstep = exports.quinticinterpol = exports.v3 = exports.V3 = exports._v2 = exports._V2 = exports.v2 = exports.V2 = void 0;
 // Weiterer Test
 const v2_1 = require("./v2");
 Object.defineProperty(exports, "V2", { enumerable: true, get: function () { return v2_1.V2; } });
 Object.defineProperty(exports, "v2", { enumerable: true, get: function () { return v2_1.v2; } });
+const _v2_1 = require("./_v2");
+Object.defineProperty(exports, "_V2", { enumerable: true, get: function () { return _v2_1._V2; } });
+Object.defineProperty(exports, "_v2", { enumerable: true, get: function () { return _v2_1._v2; } });
 const v3_1 = require("./v3");
 Object.defineProperty(exports, "V3", { enumerable: true, get: function () { return v3_1.V3; } });
 Object.defineProperty(exports, "v3", { enumerable: true, get: function () { return v3_1.v3; } });

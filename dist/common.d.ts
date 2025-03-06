@@ -5,6 +5,7 @@ export type IPos = {
 };
 declare const PI: number, log: (x: number) => number, sin: (x: number) => number, cos: (x: number) => number, tan: (x: number) => number, atan: (x: number) => number, atan2: (y: number, x: number) => number, random: () => number, floor: (x: number) => number, ceil: (x: number) => number, sqrt: (x: number) => number, round: (x: number) => number, exp: (x: number) => number, pow: (x: number, y: number) => number;
 declare const PI2: number;
+declare const makeFibonacci: (n: number) => number[];
 declare const map: (n: number, start: number, stop: number, targetStart: number, targetStop: number) => number;
 declare const lerp: (start: number, stop: number, amt: number) => number;
 declare const mix: (start: number, stop: number, amt: number) => number;
@@ -42,4 +43,4 @@ declare function sawTooth(_x: number, A: number): number;
 declare function make2dSquareArray(MAP_DIMENSION: number): any[][];
 declare function make2dArray(MAP_DIMENSION_Y: number, MAP_DIMENSION_X: number): any[][];
 declare function shuffleArray(array: any[]): any[];
-export { resetRNDHASH, map, lerp, mix, dist, rnd, RND, random2, fract, clamp, smoothstep, quinticinterpol, weightedRandomLn, pickRandomFromArray, pickRandom, createPseudoPoissonDistribution, randomWeightedFromArray, PI, PI2, log, sin, cos, tan, atan2, atan, random, floor, ceil, sqrt, swapVals, round, exp, pow, rndInt, isEven, rand_box_muller, sawTooth, make2dArray, make2dSquareArray, modWrap, shuffleArray };
+export { resetRNDHASH, map, lerp, mix, dist, rnd, RND, random2, fract, clamp, smoothstep, quinticinterpol, weightedRandomLn, pickRandomFromArray, pickRandom, createPseudoPoissonDistribution, randomWeightedFromArray, PI, PI2, log, sin, cos, tan, atan2, atan, random, floor, ceil, sqrt, swapVals, round, exp, pow, rndInt, isEven, rand_box_muller, sawTooth, make2dArray, make2dSquareArray, modWrap, shuffleArray, makeFibonacci };

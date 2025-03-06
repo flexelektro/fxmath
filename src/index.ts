@@ -1,8 +1,10 @@
 // Weiterer Test
 import {V2,v2} from "./v2";
+import {_V2,_v2} from "./_v2";
 import {V3,v3} from "./v3";
 
-export {V2, v2, V3, v3}
+export {V2, v2,_V2,_v2,
+    V3, v3}
 export {
     quinticinterpol,
     smoothstep,

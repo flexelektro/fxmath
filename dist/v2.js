@@ -176,7 +176,7 @@ class V2 {
         return new V2(vector.x * scalar, vector.y * scalar);
     }
     /**
-     * Multiplies two vectors component-wise.
+     * Multiplies two vectors component-wise. (Hadamard-Produkt)
      * @param {V2} v0 - First vector.
      * @param {V2} v1 - Second vector.
      * @returns {V2} The resulting vector.

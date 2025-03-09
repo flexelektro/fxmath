@@ -114,7 +114,7 @@ declare class V2 {
      */
     static multiply(vector: V2, scalar: number): V2;
     /**
-     * Multiplies two vectors component-wise.
+     * Multiplies two vectors component-wise. (Hadamard-Produkt)
      * @param {V2} v0 - First vector.
      * @param {V2} v1 - Second vector.
      * @returns {V2} The resulting vector.

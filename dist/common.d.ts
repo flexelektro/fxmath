@@ -43,4 +43,5 @@ declare function sawTooth(_x: number, A: number): number;
 declare function make2dSquareArray(MAP_DIMENSION: number): any[][];
 declare function make2dArray(MAP_DIMENSION_Y: number, MAP_DIMENSION_X: number): any[][];
 declare function shuffleArray(array: any[]): any[];
-export { resetRNDHASH, map, lerp, mix, dist, rnd, RND, random2, fract, clamp, smoothstep, quinticinterpol, weightedRandomLn, pickRandomFromArray, pickRandom, createPseudoPoissonDistribution, randomWeightedFromArray, PI, PI2, log, sin, cos, tan, atan2, atan, random, floor, ceil, sqrt, swapVals, round, exp, pow, rndInt, isEven, rand_box_muller, sawTooth, make2dArray, make2dSquareArray, modWrap, shuffleArray, makeFibonacci };
+declare function debounce<T extends (...args: any[]) => void>(func: T, delay: number): T;
+export { resetRNDHASH, map, lerp, mix, dist, rnd, RND, random2, fract, clamp, smoothstep, quinticinterpol, weightedRandomLn, pickRandomFromArray, pickRandom, createPseudoPoissonDistribution, randomWeightedFromArray, PI, PI2, log, sin, cos, tan, atan2, atan, random, floor, ceil, sqrt, swapVals, round, exp, pow, rndInt, isEven, rand_box_muller, sawTooth, make2dArray, make2dSquareArray, modWrap, shuffleArray, makeFibonacci, debounce };

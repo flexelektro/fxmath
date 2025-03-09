@@ -47,6 +47,9 @@ export {
     sawTooth,
     weightedRandomLn,
     resetRNDHASH,
-    atan
+    atan,
+    debounce,
+    rand_box_muller,
+
 } from './common';
 

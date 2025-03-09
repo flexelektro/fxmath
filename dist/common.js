@@ -5,6 +5,7 @@ exports.sawTooth = sawTooth;
 exports.make2dArray = make2dArray;
 exports.make2dSquareArray = make2dSquareArray;
 exports.shuffleArray = shuffleArray;
+exports.debounce = debounce;
 const v2_1 = require("./v2");
 const { PI, log, sin, cos, tan, atan, atan2, random, floor, ceil, sqrt, round, exp, pow } = Math;
 exports.PI = PI;
@@ -248,5 +249,13 @@ function shuffleArray(array) {
         ];
     }
     return array;
+}
+function debounce(func, delay) {
+    let timeoutId = null;
+    return ((...args) => {
+        if (timeoutId)
+            clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => func(...args), delay);
+    });
 }
 //# sourceMappingURL=common.js.map

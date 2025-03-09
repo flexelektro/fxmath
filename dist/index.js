@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.atan = exports.resetRNDHASH = exports.weightedRandomLn = exports.sawTooth = exports.PI = exports.make2dSquareArray = exports.make2dArray = exports.shuffleArray = exports.modWrap = exports.map = exports.pow = exports.exp = exports.round = exports.swapVals = exports.sqrt = exports.ceil = exports.floor = exports.random = exports.atan2 = exports.tan = exports.cos = exports.sin = exports.log = exports.PI2 = exports.RND = exports.random2 = exports.pickRandom = exports.dist = exports.mix = exports.lerp = exports.pickRandomFromArray = exports.randomWeightedFromArray = exports.createPseudoPoissonDistribution = exports.isEven = exports.rndInt = exports.rnd = exports.clamp = exports.fract = exports.smoothstep = exports.quinticinterpol = exports.v3 = exports.V3 = exports._v2 = exports._V2 = exports.v2 = exports.V2 = void 0;
+exports.rand_box_muller = exports.debounce = exports.atan = exports.resetRNDHASH = exports.weightedRandomLn = exports.sawTooth = exports.PI = exports.make2dSquareArray = exports.make2dArray = exports.shuffleArray = exports.modWrap = exports.map = exports.pow = exports.exp = exports.round = exports.swapVals = exports.sqrt = exports.ceil = exports.floor = exports.random = exports.atan2 = exports.tan = exports.cos = exports.sin = exports.log = exports.PI2 = exports.RND = exports.random2 = exports.pickRandom = exports.dist = exports.mix = exports.lerp = exports.pickRandomFromArray = exports.randomWeightedFromArray = exports.createPseudoPoissonDistribution = exports.isEven = exports.rndInt = exports.rnd = exports.clamp = exports.fract = exports.smoothstep = exports.quinticinterpol = exports.v3 = exports.V3 = exports._v2 = exports._V2 = exports.v2 = exports.V2 = void 0;
 // Weiterer Test
 const v2_1 = require("./v2");
 Object.defineProperty(exports, "V2", { enumerable: true, get: function () { return v2_1.V2; } });
@@ -52,4 +52,6 @@ Object.defineProperty(exports, "sawTooth", { enumerable: true, get: function () 
 Object.defineProperty(exports, "weightedRandomLn", { enumerable: true, get: function () { return common_1.weightedRandomLn; } });
 Object.defineProperty(exports, "resetRNDHASH", { enumerable: true, get: function () { return common_1.resetRNDHASH; } });
 Object.defineProperty(exports, "atan", { enumerable: true, get: function () { return common_1.atan; } });
+Object.defineProperty(exports, "debounce", { enumerable: true, get: function () { return common_1.debounce; } });
+Object.defineProperty(exports, "rand_box_muller", { enumerable: true, get: function () { return common_1.rand_box_muller; } });
 //# sourceMappingURL=index.js.map

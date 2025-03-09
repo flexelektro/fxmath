@@ -275,11 +275,19 @@ function shuffleArray(array:any[]) {
   return array;
 }
 
+function debounce<T extends (...args: any[]) => void>(func: T, delay: number): T {
+  let timeoutId: ReturnType<typeof setTimeout> | null = null;
+  return ((...args: Parameters<T>) => {
+    if (timeoutId) clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => func(...args), delay);
+  }) as T;
+}
+
 
 export {resetRNDHASH, map, lerp, mix, dist, rnd,RND, random2, fract, 
   clamp, smoothstep,quinticinterpol, weightedRandomLn, pickRandomFromArray, pickRandom,
   createPseudoPoissonDistribution,randomWeightedFromArray,
   PI,PI2,log,sin,cos,tan,atan2,atan,random,floor,ceil,sqrt,swapVals,round,exp,pow,rndInt,isEven,rand_box_muller,
-    sawTooth,make2dArray,make2dSquareArray,modWrap,shuffleArray,makeFibonacci
+    sawTooth,make2dArray,make2dSquareArray,modWrap,shuffleArray,makeFibonacci,debounce
 }
 

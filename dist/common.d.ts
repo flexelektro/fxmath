@@ -125,7 +125,11 @@ declare const randomWeightedFromArray: <T>(arr: {
     start?: number;
     end?: number;
 }[]) => T;
-declare const swapVals: (a: number, b: number) => never[];
+/**
+ * Swaps two values and returns them as a tuple [b, a].
+ * Usage: const [newA, newB] = swapVals(a, b);
+ */
+declare const swapVals: <T>(a: T, b: T) => [T, T];
 declare const isEven: (n: number) => boolean;
 declare function sawTooth(_x: number, A: number): number;
 /**

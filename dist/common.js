@@ -327,11 +327,12 @@ const randomWeightedFromArray = (arr) => {
     return theOne.value;
 };
 exports.randomWeightedFromArray = randomWeightedFromArray;
+/**
+ * Swaps two values and returns them as a tuple [b, a].
+ * Usage: const [newA, newB] = swapVals(a, b);
+ */
 const swapVals = (a, b) => {
-    let temp = b;
-    b = a;
-    a = temp;
-    return [];
+    return [b, a];
 };
 exports.swapVals = swapVals;
 const isEven = (n) => {

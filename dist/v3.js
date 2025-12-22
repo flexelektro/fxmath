@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Matrix4 = exports.V3 = exports.v3 = void 0;
-const common_1 = require("./common");
+const vec3core_1 = require("./vec3core");
 const v3 = (x = 0, y = 0, z = 0) => {
     return new V3(x, y, z);
 };
@@ -12,172 +12,499 @@ class V3 {
         this.y = y;
         this.z = z;
     }
+    // ============================================================================
+    // STATIC METHODS
+    // ============================================================================
+    /**
+     * Linearly interpolates between two vectors.
+     * @param {V3} v1 - First vector.
+     * @param {V3} v2 - Second vector.
+     * @param {number} amt - Interpolation amount (0 to 1).
+     * @returns {V3} The interpolated vector.
+     */
     static lerp(v1, v2, amt) {
-        let x = (0, common_1.lerp)(v1.x, v2.x, amt);
-        let y = (0, common_1.lerp)(v1.y, v2.y, amt);
-        let z = (0, common_1.lerp)(v1.z, v2.z, amt);
-        return (0, exports.v3)(x, y, z);
+        const r = (0, vec3core_1.vec3Lerp)(v1.x, v1.y, v1.z, v2.x, v2.y, v2.z, amt);
+        return new V3(r.x, r.y, r.z);
     }
+    /**
+     * Clones a vector.
+     * @param {V3} v - The vector to clone.
+     * @returns {V3} A new instance with the same values.
+     */
     static clone(v) {
-        return (0, exports.v3)(v.x, v.y, v.z);
+        return new V3(v.x, v.y, v.z);
     }
+    /**
+     * Creates a zero vector (0, 0, 0).
+     * @returns {V3} A zero vector.
+     */
     static zero() {
-        return (0, exports.v3)(0, 0, 0);
+        return new V3(0, 0, 0);
     }
+    /**
+     * Creates an up vector (0, 1, 0).
+     * @returns {V3} An up vector.
+     */
     static up() {
-        return (0, exports.v3)(0, 1.0, 0);
+        return new V3(0, 1.0, 0);
     }
+    /**
+     * Creates a right vector (1, 0, 0).
+     * @returns {V3} A right vector.
+     */
+    static right() {
+        return new V3(1.0, 0, 0);
+    }
+    /**
+     * Creates a forward vector (0, 0, 1).
+     * @returns {V3} A forward vector.
+     */
+    static forward() {
+        return new V3(0, 0, 1.0);
+    }
+    /**
+     * Adds two vectors.
+     * @param {V3} a - First vector.
+     * @param {V3} b - Second vector.
+     * @returns {V3} The resulting vector.
+     */
     static add(a, b) {
-        let x = a.x + b.x;
-        let y = a.y + b.y;
-        let z = a.z + b.z;
-        return (0, exports.v3)(x, y, z);
+        const r = (0, vec3core_1.vec3Add)(a.x, a.y, a.z, b.x, b.y, b.z);
+        return new V3(r.x, r.y, r.z);
     }
+    /**
+     * Subtracts vector b from vector a.
+     * @param {V3} a - First vector.
+     * @param {V3} b - Second vector.
+     * @returns {V3} The resulting vector.
+     */
     static sub(a, b) {
-        let x = a.x - b.x;
-        let y = a.y - b.y;
-        let z = a.z - b.z;
-        return (0, exports.v3)(x, y, z);
+        const r = (0, vec3core_1.vec3Sub)(a.x, a.y, a.z, b.x, b.y, b.z);
+        return new V3(r.x, r.y, r.z);
     }
+    /**
+     * Alias for `sub`.
+     */
+    static subtract(a, b) {
+        return V3.sub(a, b);
+    }
+    /**
+     * Multiplies a vector by a scalar.
+     * @param {V3} v - The vector to multiply.
+     * @param {number} factor - The scalar value.
+     * @returns {V3} The scaled vector.
+     */
     static mult(v, factor) {
-        let x = v.x * factor;
-        let y = v.y * factor;
-        let z = v.z * factor;
-        return (0, exports.v3)(x, y, z);
+        const r = (0, vec3core_1.vec3Mult)(v.x, v.y, v.z, factor);
+        return new V3(r.x, r.y, r.z);
     }
+    /**
+     * Alias for `mult`.
+     */
     static multiply(v, factor) {
         return V3.mult(v, factor);
     }
+    /**
+     * Divides a vector by a scalar.
+     * @param {V3} v - The vector to divide.
+     * @param {number} n0 - The scalar divisor.
+     * @returns {V3} The resulting vector.
+     */
     static divide(v, n0) {
-        if (n0 === 0) {
-            throw Error("Division by 0");
-        }
-        let n = 1 / n0;
-        return V3.mult(v, n);
+        const r = (0, vec3core_1.vec3Div)(v.x, v.y, v.z, n0);
+        return new V3(r.x, r.y, r.z);
     }
+    /**
+     * Computes the cross product of two vectors.
+     * @param {V3} a - First vector.
+     * @param {V3} b - Second vector.
+     * @returns {V3} The cross product vector.
+     */
     static cross(a, b) {
-        let x = a.y * b.z - a.z * b.y;
-        let y = a.z * b.x - a.x * b.z;
-        let z = a.x * b.y - a.y * b.x;
-        return new V3(x, y, z);
+        const r = (0, vec3core_1.vec3Cross)(a.x, a.y, a.z, b.x, b.y, b.z);
+        return new V3(r.x, r.y, r.z);
     }
+    /**
+     * Computes the dot product of two vectors.
+     * @param {V3} a - First vector.
+     * @param {V3} b - Second vector.
+     * @returns {number} The dot product.
+     */
     static dot(a, b) {
-        return (a.x * b.x + a.y * b.y + a.z * b.z);
+        return (0, vec3core_1.vec3Dot)(a.x, a.y, a.z, b.x, b.y, b.z);
     }
+    /**
+     * Returns a vector with absolute values.
+     * @param {V3} v - The vector.
+     * @returns {V3} A new vector with absolute values.
+     */
     static abs(v) {
-        return (0, exports.v3)(Math.abs(v.x), Math.abs(v.y), Math.abs(v.z));
+        const r = (0, vec3core_1.vec3Abs)(v.x, v.y, v.z);
+        return new V3(r.x, r.y, r.z);
     }
+    /**
+     * Returns the component-wise maximum of two vectors.
+     * @param {V3} v1 - First vector.
+     * @param {V3} v2 - Second vector.
+     * @returns {V3} The component-wise maximum.
+     */
     static max(v1, v2) {
-        let x = Math.max(v1.x, v2.x);
-        let y = Math.max(v1.y, v2.y);
-        let z = Math.max(v1.z, v2.z);
-        return (0, exports.v3)(x, y, z);
+        const r = (0, vec3core_1.vec3Max)(v1.x, v1.y, v1.z, v2.x, v2.y, v2.z);
+        return new V3(r.x, r.y, r.z);
     }
+    /**
+     * Returns the component-wise minimum of two vectors.
+     * @param {V3} v1 - First vector.
+     * @param {V3} v2 - Second vector.
+     * @returns {V3} The component-wise minimum.
+     */
+    static min(v1, v2) {
+        const r = (0, vec3core_1.vec3Min)(v1.x, v1.y, v1.z, v2.x, v2.y, v2.z);
+        return new V3(r.x, r.y, r.z);
+    }
+    /**
+     * Returns the negated vector.
+     * @param {V3} v - The vector to negate.
+     * @returns {V3} The negated vector.
+     */
+    static negate(v) {
+        const r = (0, vec3core_1.vec3Negate)(v.x, v.y, v.z);
+        return new V3(r.x, r.y, r.z);
+    }
+    /**
+     * Computes the magnitude (length) of a vector.
+     * @param {V3} v - The vector.
+     * @returns {number} The magnitude of the vector.
+     */
+    static magnitude(v) {
+        return (0, vec3core_1.vec3Mag)(v.x, v.y, v.z);
+    }
+    /**
+     * Computes the squared magnitude of a vector.
+     * @param {V3} v - The vector.
+     * @returns {number} The squared magnitude.
+     */
+    static squareMagnitude(v) {
+        return (0, vec3core_1.vec3SquareMag)(v.x, v.y, v.z);
+    }
+    /**
+     * Computes the distance between two vectors.
+     * @param {V3} v1 - First vector.
+     * @param {V3} v2 - Second vector.
+     * @returns {number} The distance.
+     */
+    static distance(v1, v2) {
+        return (0, vec3core_1.vec3Distance)(v1.x, v1.y, v1.z, v2.x, v2.y, v2.z);
+    }
+    /**
+     * Creates a vector from point A to point B.
+     * @param {V3} a - The starting point.
+     * @param {V3} b - The ending point.
+     * @returns {V3} The resulting vector.
+     */
+    static fromTo(a, b) {
+        const r = (0, vec3core_1.vec3FromTo)(a.x, a.y, a.z, b.x, b.y, b.z);
+        return new V3(r.x, r.y, r.z);
+    }
+    /**
+     * Checks if two vectors are identical.
+     * @param {V3} a - First vector.
+     * @param {V3} b - Second vector.
+     * @returns {boolean} True if identical.
+     */
+    static sameLike(a, b) {
+        return (0, vec3core_1.vec3SameLike)(a.x, a.y, a.z, b.x, b.y, b.z);
+    }
+    /**
+     * Computes the angle between two vectors.
+     * @param {V3} a - First vector.
+     * @param {V3} b - Second vector.
+     * @returns {number} The angle in radians.
+     */
+    static angleBetween(a, b) {
+        return (0, vec3core_1.vec3AngleBetween)(a.x, a.y, a.z, b.x, b.y, b.z);
+    }
+    /**
+     * Normalizes a vector to unit length.
+     * @param {V3} v - The vector to normalize.
+     * @returns {V3} The unit vector.
+     */
+    static unitVec(v) {
+        const r = (0, vec3core_1.vec3Normalize)(v.x, v.y, v.z);
+        return new V3(r.x, r.y, r.z);
+    }
+    /**
+     * Projects vector v1 onto vector v2.
+     * @param {V3} v1 - The vector to project.
+     * @param {V3} v2 - The vector to project onto.
+     * @returns {V3} The projected vector.
+     */
+    static project(v1, v2) {
+        const r = (0, vec3core_1.vec3Project)(v1.x, v1.y, v1.z, v2.x, v2.y, v2.z);
+        return new V3(r.x, r.y, r.z);
+    }
+    /**
+     * Reflects a vector across a normal.
+     * @param {V3} v - The vector to reflect.
+     * @param {V3} normal - The normal vector.
+     * @returns {V3} The reflected vector.
+     */
+    static reflect(v, normal) {
+        const r = (0, vec3core_1.vec3Reflect)(v.x, v.y, v.z, normal.x, normal.y, normal.z);
+        return new V3(r.x, r.y, r.z);
+    }
+    /**
+     * Transforms a vector by a 4x4 matrix with perspective division.
+     * @param {V3} v - The vector to transform.
+     * @param {Matrix4} mat - The transformation matrix.
+     * @returns {V3} The transformed vector.
+     */
+    static transformCoordinates(v, mat) {
+        const r = (0, vec3core_1.vec3TransformCoordinates)(v.x, v.y, v.z, mat.m);
+        return new V3(r.x, r.y, r.z);
+    }
+    /**
+     * Multiplies a vector by a 4x4 matrix without perspective division.
+     * @param {V3} v - The vector to transform.
+     * @param {Matrix4} mat - The transformation matrix.
+     * @returns {V3} The transformed vector.
+     */
+    static multiplyWithMatrix(v, mat) {
+        const r = (0, vec3core_1.vec3MultiplyWithMatrix)(v.x, v.y, v.z, mat.m);
+        return new V3(r.x, r.y, r.z);
+    }
+    // ============================================================================
+    // INSTANCE METHODS
+    // ============================================================================
+    /**
+     * Sets all components to zero.
+     * @returns {V3} This vector.
+     */
     zero() {
         this.x = this.y = this.z = 0;
         return this;
     }
+    /**
+     * Creates a copy of this vector.
+     * @returns {V3} A new vector with the same values.
+     */
     clone() {
-        return (0, exports.v3)(this.x, this.y, this.z);
+        return new V3(this.x, this.y, this.z);
     }
+    /**
+     * Sets all components to their absolute values.
+     * @returns {V3} This vector.
+     */
     abs() {
-        this.x = Math.abs(this.x);
-        this.y = Math.abs(this.y);
-        this.z = Math.abs(this.z);
+        const r = (0, vec3core_1.vec3Abs)(this.x, this.y, this.z);
+        this.x = r.x;
+        this.y = r.y;
+        this.z = r.z;
         return this;
     }
+    /**
+     * Adds another vector to this vector.
+     * @param {V3} v - The vector to add.
+     * @returns {V3} This vector.
+     */
     add(v) {
-        this.x = this.x + v.x;
-        this.y = this.y + v.y;
-        this.z = this.z + v.z;
+        this.x += v.x;
+        this.y += v.y;
+        this.z += v.z;
         return this;
     }
+    /**
+     * Sets this vector to the component-wise maximum with another vector.
+     * @param {V3} v2 - The other vector.
+     * @returns {V3} This vector.
+     */
     max(v2) {
-        this.x = Math.max(this.x, v2.x);
-        this.y = Math.max(this.y, v2.y);
-        this.z = Math.max(this.z, v2.z);
+        const r = (0, vec3core_1.vec3Max)(this.x, this.y, this.z, v2.x, v2.y, v2.z);
+        this.x = r.x;
+        this.y = r.y;
+        this.z = r.z;
+        return this;
     }
+    /**
+     * Sets this vector to the component-wise minimum with another vector.
+     * @param {V3} v2 - The other vector.
+     * @returns {V3} This vector.
+     */
+    min(v2) {
+        const r = (0, vec3core_1.vec3Min)(this.x, this.y, this.z, v2.x, v2.y, v2.z);
+        this.x = r.x;
+        this.y = r.y;
+        this.z = r.z;
+        return this;
+    }
+    /**
+     * Subtracts another vector from this vector.
+     * @param {V3} v - The vector to subtract.
+     * @returns {V3} This vector.
+     */
     sub(v) {
-        this.x = this.x - v.x;
-        this.y = this.y - v.y;
-        this.z = this.z - v.z;
+        this.x -= v.x;
+        this.y -= v.y;
+        this.z -= v.z;
         return this;
     }
+    /**
+     * Alias for `sub`.
+     */
+    subtract(v) {
+        return this.sub(v);
+    }
+    /**
+     * Multiplies this vector by a scalar.
+     * @param {number} n - The scalar value.
+     * @returns {V3} This vector.
+     */
     mult(n) {
-        this.x = this.x * n;
-        this.y = this.y * n;
-        this.z = this.z * n;
+        this.x *= n;
+        this.y *= n;
+        this.z *= n;
         return this;
     }
+    /**
+     * Alias for `mult`.
+     */
     multiply(n) {
         return this.mult(n);
     }
+    /**
+     * Divides this vector by a scalar.
+     * @param {number} n0 - The scalar divisor.
+     * @returns {V3} This vector.
+     */
     divide(n0) {
-        let n = 1 / n0;
-        this.x = this.x * n;
-        this.y = this.y * n;
-        this.z = this.z * n;
+        const n = 1 / n0;
+        this.x *= n;
+        this.y *= n;
+        this.z *= n;
         return this;
     }
+    /**
+     * Computes the dot product with another vector.
+     * @param {V3} v - The other vector.
+     * @returns {number} The dot product.
+     */
     dot(v) {
-        return (this.x * v.x + this.y * v.y + this.z * v.z);
+        return (0, vec3core_1.vec3Dot)(this.x, this.y, this.z, v.x, v.y, v.z);
     }
+    /**
+     * Alias for `dot`.
+     */
     dotProd(v) {
         return this.dot(v);
     }
+    /**
+     * Computes the cross product with another vector.
+     * @param {V3} b - The other vector.
+     * @returns {V3} A new vector representing the cross product.
+     */
     cross(b) {
-        const ax = this.x, ay = this.y, az = this.z;
-        const bx = b.x, by = b.y, bz = b.z;
-        let x = ay * bz - az * by;
-        let y = az * bx - ax * bz;
-        let z = ax * by - ay * bx;
-        return new V3(x, y, z);
+        const r = (0, vec3core_1.vec3Cross)(this.x, this.y, this.z, b.x, b.y, b.z);
+        return new V3(r.x, r.y, r.z);
     }
+    /**
+     * Alias for `cross`.
+     */
     crossProd(b) {
         return this.cross(b);
     }
+    /**
+     * Returns the squared length of this vector.
+     * @returns {number} The squared length.
+     */
     lengthSq() {
-        return this.x * this.x + this.y * this.y + this.z * this.z;
+        return (0, vec3core_1.vec3SquareMag)(this.x, this.y, this.z);
     }
+    /**
+     * Returns the length (magnitude) of this vector.
+     * @returns {number} The length.
+     */
     length() {
-        return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+        return (0, vec3core_1.vec3Mag)(this.x, this.y, this.z);
     }
+    /**
+     * Alias for `length`.
+     */
     magnitude() {
         return this.length();
     }
+    /**
+     * Normalizes this vector to unit length.
+     * @returns {V3} This vector.
+     */
     normalize() {
         return this.divide(this.length() || 1);
     }
+    /**
+     * Alias for `normalize`.
+     */
     unitVector() {
         return this.normalize();
     }
-    static transformCoordinates(v, mat) {
-        const { x, y, z } = v;
-        let m = mat.m;
-        const rx = x * m[0] + y * m[4] + z * m[8] + m[12];
-        const ry = x * m[1] + y * m[5] + z * m[9] + m[13];
-        const rz = x * m[2] + y * m[6] + z * m[10] + m[14];
-        const rw = x * m[3] + y * m[7] + z * m[11] + m[15];
-        return (0, exports.v3)(rx / rw, ry / rw, rz);
+    /**
+     * Negates this vector.
+     * @returns {V3} This vector.
+     */
+    negate() {
+        this.x = -this.x;
+        this.y = -this.y;
+        this.z = -this.z;
+        return this;
     }
-    static multiplyWithMatrix(v, mat) {
-        const { x, y, z } = v;
-        let m = mat.m;
-        const rx = x * m[0] + y * m[4] + z * m[8] + m[12];
-        const ry = x * m[1] + y * m[5] + z * m[9] + m[13];
-        const rz = x * m[2] + y * m[6] + z * m[10] + m[14];
-        const rw = x * m[3] + y * m[7] + z * m[11] + m[15];
-        return (0, exports.v3)(rx, ry, rz);
+    /**
+     * Computes the distance to another vector.
+     * @param {V3} v - The other vector.
+     * @returns {number} The distance.
+     */
+    distance(v) {
+        return (0, vec3core_1.vec3Distance)(this.x, this.y, this.z, v.x, v.y, v.z);
     }
+    /**
+     * Checks if this vector is identical to another.
+     * @param {V3} v - The other vector.
+     * @returns {boolean} True if identical.
+     */
+    sameLike(v) {
+        return (0, vec3core_1.vec3SameLike)(this.x, this.y, this.z, v.x, v.y, v.z);
+    }
+    /**
+     * Linearly interpolates this vector towards another.
+     * @param {V3} v - The target vector.
+     * @param {number} amt - Interpolation amount (0 to 1).
+     * @returns {V3} This vector.
+     */
+    lerp(v, amt) {
+        const r = (0, vec3core_1.vec3Lerp)(this.x, this.y, this.z, v.x, v.y, v.z, amt);
+        this.x = r.x;
+        this.y = r.y;
+        this.z = r.z;
+        return this;
+    }
+    /**
+     * Floors all components using bitwise OR.
+     * @returns {V3} This vector.
+     */
     floorValues() {
         this.x = this.x | 0;
         this.y = this.y | 0;
         this.z = this.z | 0;
         return this;
     }
+    /**
+     * Returns the angle in the XY plane.
+     * @returns {number} The angle in radians.
+     */
     angleXY() {
-        return (0, common_1.atan2)(this.x, this.y);
+        return (0, vec3core_1.vec3AngleXY)(this.x, this.y);
     }
+    /**
+     * Converts this vector to an array.
+     * @returns {number[]} An array [x, y, z].
+     */
     toArray() {
         return [this.x, this.y, this.z];
     }

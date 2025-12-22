@@ -1,4 +1,12 @@
-import { lerp } from "./common";
+import {
+    vec2Add, vec2Sub, vec2Mult, vec2Div, vec2MultVec,
+    vec2Dot, vec2Cross, vec2Mag, vec2SquareMag, vec2Angle,
+    vec2AngleBetween, vec2SameLike, vec2ManhattanDist,
+    vec2FromTo, vec2FromMagAngle, vec2Normalize,
+    vec2Rotate, vec2RotateAroundPivot,
+    vec2NormalLeft, vec2NormalRight, vec2Lerp, vec2Project, vec2Floor,
+    vec2LinesIntersect, vec2IsPointInPolygon, IVec2
+} from "./vec2core";
 
 
 const _v2 = (x: number, y: number) => {
@@ -9,15 +17,29 @@ class _V2 {
     public readonly x: number;
     public readonly y: number;
 
+    /**
+     * Creates a new immutable 2D vector.
+     * @param {number} x - The X-coordinate.
+     * @param {number} y - The Y-coordinate.
+     */
+    constructor(x: number, y: number) {
+        this.x = x;
+        this.y = y;
+    }
+
+    // ============================================================================
+    // STATIC METHODS
+    // ============================================================================
 
     /**
      * Creates a vector from point A to point B.
-     * @param {V2} a - The starting point.
-     * @param {V2} b - The ending point.
-     * @returns {V2} The resulting vector.
+     * @param {_V2} a - The starting point.
+     * @param {_V2} b - The ending point.
+     * @returns {_V2} The resulting vector.
      */
     public static fromTo(a: _V2, b: _V2): _V2 {
-        return _v2(b.x - a.x, b.y - a.y);
+        const r = vec2FromTo(a.x, a.y, b.x, b.y);
+        return new _V2(r.x, r.y);
     }
 
     /**
@@ -27,7 +49,7 @@ class _V2 {
      * @returns {boolean} `true` if the vectors are the same, otherwise `false`.
      */
     public static sameLike(a: _V2, b: _V2): boolean {
-        return a.x === b.x && a.y === b.y;
+        return vec2SameLike(a.x, a.y, b.x, b.y);
     }
 
     /**
@@ -39,47 +61,18 @@ class _V2 {
      * @returns {_V2 | false} The intersection point or `false` if no intersection exists.
      */
     public static linesIntersect(pA: _V2, pA2: _V2, pB: _V2, pB2: _V2): _V2 | false {
-        let denominator =
-            (pB2.y - pB.y) * (pA2.x - pA.x) - (pB2.x - pB.x) * (pA2.y - pA.y);
-
-        if (denominator === 0) return false; // Parallel lines
-
-        let ua =
-            ((pB2.x - pB.x) * (pA.y - pB.y) - (pB2.y - pB.y) * (pA.x - pB.x)) /
-            denominator;
-        let ub =
-            ((pA2.x - pA.x) * (pA.y - pB.y) - (pA2.y - pA.y) * (pA.x - pB.x)) /
-            denominator;
-
-        if (ua < 0 || ua > 1 || ub < 0 || ub > 1) return false;
-
-        let x = pA.x + ua * (pA2.x - pA.x);
-        let y = pA.y + ua * (pA2.y - pA.y);
-
-        return _v2(x, y);
+        const r = vec2LinesIntersect(pA.x, pA.y, pA2.x, pA2.y, pB.x, pB.y, pB2.x, pB2.y);
+        return r ? new _V2(r.x, r.y) : false;
     }
 
     /**
      * Checks if a point is inside a polygon.
      * @param {_V2} p - The point to check.
-     * @param {_V2[]} polygon - An array of vectors defining the polygon.
+     * @param {IVec2[]} polygon - An array of vectors defining the polygon.
      * @returns {boolean} `true` if the point is inside, otherwise `false`.
      */
-    public static isPointInPolygon(p: _V2, polygon: {x:number,y:number}[]): boolean {
-        let len = polygon.length;
-        let inside = false;
-        for (let i = 0, j = len - 1; i < len; j = i++) {
-            if (
-                (polygon[i].y > p.y) !== (polygon[j].y > p.y) &&
-                p.x <
-                ((polygon[j].x - polygon[i].x) * (p.y - polygon[i].y)) /
-                (polygon[j].y - polygon[i].y) +
-                polygon[i].x
-            ) {
-                inside = !inside;
-            }
-        }
-        return inside;
+    public static isPointInPolygon(p: _V2, polygon: IVec2[]): boolean {
+        return vec2IsPointInPolygon(p.x, p.y, polygon);
     }
 
     /**
@@ -99,7 +92,8 @@ class _V2 {
      * @returns {_V2} The resulting vector.
      */
     public static createByMagnitudeAndAngle(mag: number, angle: number): _V2 {
-        return new _V2(mag * Math.cos(angle), mag * Math.sin(angle));
+        const r = vec2FromMagAngle(mag, angle);
+        return new _V2(r.x, r.y);
     }
 
     /**
@@ -108,7 +102,7 @@ class _V2 {
      * @returns {number} The angle in radians.
      */
     public static getAngle(v: _V2): number {
-        return Math.atan2(v.y, v.x);
+        return vec2Angle(v.x, v.y);
     }
 
     /**
@@ -118,7 +112,7 @@ class _V2 {
      * @returns {number} The angle in radians.
      */
     public static angleBetween(a: _V2, b: _V2): number {
-        return Math.acos(_V2.dotprod(a, b) / (a.magnitude * b.magnitude));
+        return vec2AngleBetween(a.x, a.y, b.x, b.y);
     }
 
     /**
@@ -136,7 +130,7 @@ class _V2 {
      * @returns {number} The magnitude of the vector.
      */
     public static magnitude(v: _V2): number {
-        return v.magnitude;
+        return vec2Mag(v.x, v.y);
     }
 
     /**
@@ -145,7 +139,7 @@ class _V2 {
      * @returns {number} The squared magnitude.
      */
     public static squareMagnitude(v: _V2): number {
-        return v.squareMagnitude;
+        return vec2SquareMag(v.x, v.y);
     }
 
     /**
@@ -155,7 +149,8 @@ class _V2 {
      * @returns {number} The distance between `v1` and `v2`.
      */
     public static distance(v1: _V2, v2: _V2): number {
-        return _V2.subtract(v1, v2).magnitude;
+        const r = vec2Sub(v1.x, v1.y, v2.x, v2.y);
+        return vec2Mag(r.x, r.y);
     }
 
     /**
@@ -165,7 +160,8 @@ class _V2 {
      * @returns {_V2} The resulting vector.
      */
     public static add(v1: _V2, v2: _V2): _V2 {
-        return new _V2(v1.x + v2.x, v1.y + v2.y);
+        const r = vec2Add(v1.x, v1.y, v2.x, v2.y);
+        return new _V2(r.x, r.y);
     }
 
     /**
@@ -175,7 +171,8 @@ class _V2 {
      * @returns {_V2} The resulting vector.
      */
     public static subtract(v1: _V2, v2: _V2): _V2 {
-        return new _V2(v1.x - v2.x, v1.y - v2.y);
+        const r = vec2Sub(v1.x, v1.y, v2.x, v2.y);
+        return new _V2(r.x, r.y);
     }
 
     /**
@@ -195,7 +192,8 @@ class _V2 {
      * @returns {_V2} The scaled vector.
      */
     public static multiply(vector: _V2, scalar: number): _V2 {
-        return new _V2(vector.x * scalar, vector.y * scalar);
+        const r = vec2Mult(vector.x, vector.y, scalar);
+        return new _V2(r.x, r.y);
     }
 
     /**
@@ -205,7 +203,8 @@ class _V2 {
      * @returns {_V2} The resulting vector.
      */
     public static multVec(v0: _V2, v1: _V2): _V2 {
-        return new _V2(v0.x * v1.x, v0.y * v1.y);
+        const r = vec2MultVec(v0.x, v0.y, v1.x, v1.y);
+        return new _V2(r.x, r.y);
     }
 
     /**
@@ -215,7 +214,8 @@ class _V2 {
      * @returns {_V2} The resulting vector.
      */
     public static divide(v: _V2, scalar: number): _V2 {
-        return _V2.multiply(v, 1 / scalar);
+        const r = vec2Div(v.x, v.y, scalar);
+        return new _V2(r.x, r.y);
     }
 
     /**
@@ -225,7 +225,7 @@ class _V2 {
      * @returns {number} The dot product.
      */
     public static dotprod(v1: _V2, v2: _V2): number {
-        return v1.x * v2.x + v1.y * v2.y;
+        return vec2Dot(v1.x, v1.y, v2.x, v2.y);
     }
 
     /**
@@ -245,7 +245,7 @@ class _V2 {
      * @returns {number} The cross product (a scalar value).
      */
     public static crossprod(v1: _V2, v2: _V2): number {
-        return v1.x * v2.y - v1.y * v2.x;
+        return vec2Cross(v1.x, v1.y, v2.x, v2.y);
     }
 
     /**
@@ -254,7 +254,8 @@ class _V2 {
      * @returns {_V2} The unit vector.
      */
     public static unitVec(v: _V2): _V2 {
-        return _V2.divide(v, v.magnitude);
+        const r = vec2Normalize(v.x, v.y);
+        return new _V2(r.x, r.y);
     }
 
     /**
@@ -264,8 +265,8 @@ class _V2 {
      * @returns {_V2} The projected vector.
      */
     public static projectionFromTo(v1: _V2, v2: _V2): _V2 {
-        let unitVector = _V2.unitVec(v2);
-        return _V2.multiply(unitVector, _V2.dotprod(v1, unitVector));
+        const r = vec2Project(v1.x, v1.y, v2.x, v2.y);
+        return new _V2(r.x, r.y);
     }
 
     /**
@@ -275,10 +276,8 @@ class _V2 {
      * @returns {_V2} The rotated vector.
      */
     public static rotate(v: _V2, angle: number): _V2 {
-        const cosA = Math.cos(angle);
-        const sinA = Math.sin(angle);
-
-        return new _V2(v.x * cosA - v.y * sinA, v.x * sinA + v.y * cosA);
+        const r = vec2Rotate(v.x, v.y, angle);
+        return new _V2(r.x, r.y);
     }
 
     /**
@@ -289,15 +288,8 @@ class _V2 {
      * @returns {_V2} The rotated vector.
      */
     public static rotateAroundPivot(point: _V2, pivot: _V2, angleRad: number): _V2 {
-        const cos = Math.cos(angleRad);
-        const sin = Math.sin(angleRad);
-        const dx = point.x - pivot.x;
-        const dy = point.y - pivot.y;
-
-        return new _V2(
-            cos * dx - sin * dy + pivot.x,
-            sin * dx + cos * dy + pivot.y
-        );
+        const r = vec2RotateAroundPivot(point.x, point.y, pivot.x, pivot.y, angleRad);
+        return new _V2(r.x, r.y);
     }
 
     /**
@@ -306,7 +298,8 @@ class _V2 {
      * @returns {_V2} The left normal vector.
      */
     public static normalLeft(v: _V2): _V2 {
-        return new _V2(-v.y, v.x);
+        const r = vec2NormalLeft(v.x, v.y);
+        return new _V2(r.x, r.y);
     }
 
     /**
@@ -315,7 +308,8 @@ class _V2 {
      * @returns {_V2} The right normal vector.
      */
     public static normalRight(v: _V2): _V2 {
-        return new _V2(v.y, -v.x);
+        const r = vec2NormalRight(v.x, v.y);
+        return new _V2(r.x, r.y);
     }
 
     /**
@@ -325,7 +319,7 @@ class _V2 {
      * @returns {number} The Manhattan distance.
      */
     public static manhattanDistance(v1: _V2, v2: _V2): number {
-        return Math.abs(v1.x - v2.x) + Math.abs(v1.y - v2.y);
+        return vec2ManhattanDist(v1.x, v1.y, v2.x, v2.y);
     }
 
     /**
@@ -336,22 +330,13 @@ class _V2 {
      * @returns {_V2} The interpolated vector.
      */
     public static lerp(v1: _V2, v2: _V2, amt: number): _V2 {
-        return new _V2(
-            lerp(v1.x, v2.x, amt),
-            lerp(v1.y, v2.y, amt)
-        );
+        const r = vec2Lerp(v1.x, v1.y, v2.x, v2.y, amt);
+        return new _V2(r.x, r.y);
     }
-    
-    
-    /**
-     * Creates a new immutable 2D vector.
-     * @param {number} x - The X-coordinate.
-     * @param {number} y - The Y-coordinate.
-     */
-    constructor(x: number, y: number) {
-        this.x = x;
-        this.y = y;
-    }
+
+    // ============================================================================
+    // INSTANCE METHODS (all return new instances - immutable)
+    // ============================================================================
 
     /**
      * Creates a new vector with the same values.
@@ -367,7 +352,8 @@ class _V2 {
      * @returns {_V2} A new vector with the result.
      */
     public add(v: _V2): _V2 {
-        return new _V2(this.x + v.x, this.y + v.y);
+        const r = vec2Add(this.x, this.y, v.x, v.y);
+        return new _V2(r.x, r.y);
     }
 
     /**
@@ -376,7 +362,8 @@ class _V2 {
      * @returns {_V2} A new vector with the result.
      */
     public subtract(v: _V2): _V2 {
-        return new _V2(this.x - v.x, this.y - v.y);
+        const r = vec2Sub(this.x, this.y, v.x, v.y);
+        return new _V2(r.x, r.y);
     }
 
     /**
@@ -385,7 +372,8 @@ class _V2 {
      * @returns {_V2} A new vector with the result.
      */
     public multiply(scalar: number): _V2 {
-        return new _V2(this.x * scalar, this.y * scalar);
+        const r = vec2Mult(this.x, this.y, scalar);
+        return new _V2(r.x, r.y);
     }
 
     /**
@@ -394,7 +382,8 @@ class _V2 {
      * @returns {_V2} A new vector with the result.
      */
     public divide(scalar: number): _V2 {
-        return new _V2(this.x / scalar, this.y / scalar);
+        const r = vec2Div(this.x, this.y, scalar);
+        return new _V2(r.x, r.y);
     }
 
     /**
@@ -403,7 +392,7 @@ class _V2 {
      * @returns {number} The dot product.
      */
     public dot(v: _V2): number {
-        return this.x * v.x + this.y * v.y;
+        return vec2Dot(this.x, this.y, v.x, v.y);
     }
 
     /**
@@ -412,7 +401,7 @@ class _V2 {
      * @returns {number} The cross product.
      */
     public cross(v: _V2): number {
-        return this.x * v.y - this.y * v.x;
+        return vec2Cross(this.x, this.y, v.x, v.y);
     }
 
     /**
@@ -420,8 +409,8 @@ class _V2 {
      * @returns {_V2} A new unit vector.
      */
     public normalize(): _V2 {
-        const mag = this.magnitude;
-        return mag === 0 ? new _V2(0, 0) : this.divide(mag);
+        const r = vec2Normalize(this.x, this.y);
+        return new _V2(r.x, r.y);
     }
 
     /**
@@ -430,12 +419,8 @@ class _V2 {
      * @returns {_V2} A new rotated vector.
      */
     public rotate(angle: number): _V2 {
-        const cos = Math.cos(angle);
-        const sin = Math.sin(angle);
-        return new _V2(
-            this.x * cos - this.y * sin,
-            this.x * sin + this.y * cos
-        );
+        const r = vec2Rotate(this.x, this.y, angle);
+        return new _V2(r.x, r.y);
     }
 
     /**
@@ -443,7 +428,8 @@ class _V2 {
      * @returns {_V2} A new vector rotated 90° counterclockwise.
      */
     public normalLeft(): _V2 {
-        return new _V2(-this.y, this.x);
+        const r = vec2NormalLeft(this.x, this.y);
+        return new _V2(r.x, r.y);
     }
 
     /**
@@ -451,7 +437,8 @@ class _V2 {
      * @returns {_V2} A new vector rotated 90° clockwise.
      */
     public normalRight(): _V2 {
-        return new _V2(this.y, -this.x);
+        const r = vec2NormalRight(this.x, this.y);
+        return new _V2(r.x, r.y);
     }
 
     /**
@@ -459,7 +446,7 @@ class _V2 {
      * @returns {number} The magnitude of the vector.
      */
     public get magnitude(): number {
-        return Math.sqrt(this.x * this.x + this.y * this.y);
+        return vec2Mag(this.x, this.y);
     }
 
     /**
@@ -467,7 +454,7 @@ class _V2 {
      * @returns {number} The squared magnitude.
      */
     public get squareMagnitude(): number {
-        return this.x * this.x + this.y * this.y;
+        return vec2SquareMag(this.x, this.y);
     }
 
     /**
@@ -476,7 +463,8 @@ class _V2 {
      * @returns {number} The distance.
      */
     public distance(v: _V2): number {
-        return this.subtract(v).magnitude;
+        const r = vec2Sub(this.x, this.y, v.x, v.y);
+        return vec2Mag(r.x, r.y);
     }
 
     /**
@@ -486,10 +474,8 @@ class _V2 {
      * @returns {_V2} The interpolated vector.
      */
     public lerp(v: _V2, amt: number): _V2 {
-        return new _V2(
-            lerp(this.x, v.x, amt),
-            lerp(this.y, v.y, amt)
-        );
+        const r = vec2Lerp(this.x, this.y, v.x, v.y, amt);
+        return new _V2(r.x, r.y);
     }
 
     /**
@@ -497,7 +483,8 @@ class _V2 {
      * @returns {_V2} A new vector with floored values.
      */
     public floor(): _V2 {
-        return new _V2(Math.floor(this.x), Math.floor(this.y));
+        const r = vec2Floor(this.x, this.y);
+        return new _V2(r.x, r.y);
     }
 
     /**
@@ -506,10 +493,9 @@ class _V2 {
      * @returns {boolean} `true` if inside, otherwise `false`.
      */
     public isInPolygon(polygon: _V2[]): boolean {
-        return _V2.isPointInPolygon(this, polygon);
+        return vec2IsPointInPolygon(this.x, this.y, polygon);
     }
-
-
 }
 
-export { _v2,_V2 }
+export { _v2, _V2 }
+

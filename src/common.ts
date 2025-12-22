@@ -28,9 +28,27 @@ export type IPos = {
   y: number;
 }
 
-const {PI,log,sin,cos,tan,atan,atan2,random,floor,ceil,sqrt,round, exp,pow} = Math;
+const {PI, log, sin, cos, tan, atan, atan2, random, floor, ceil, sqrt, round, exp, pow, abs, sign, min, max} = Math;
 const PI2 = PI * 2;
+const TAU = PI2;
+const HALF_PI = PI / 2;
 const GOLDENRATIO = 1.61803398875;
+const DEG2RAD = PI / 180;
+const RAD2DEG = 180 / PI;
+
+// ============================================================================
+// ANGLE CONVERSION
+// ============================================================================
+
+/**
+ * Converts degrees to radians.
+ */
+const degToRad = (degrees: number): number => degrees * DEG2RAD;
+
+/**
+ * Converts radians to degrees.
+ */
+const radToDeg = (radians: number): number => radians * RAD2DEG;
 
 
 const makeFibonacci = (n:number) => {
@@ -41,16 +59,42 @@ const makeFibonacci = (n:number) => {
     return arr;
 }
 
-const map = (n: number, start: number, stop: number, targetStart: number, targetStop: number) => {
-  const newVal = targetStart + (n - start) / (stop - start) * (targetStop - targetStart);
-  return newVal;
+/**
+ * Maps a number from one range to another.
+ * @example map(0.5, 0, 1, 0, 100) // returns 50
+ */
+const map = (n: number, start: number, stop: number, targetStart: number, targetStop: number): number => {
+  return targetStart + (n - start) / (stop - start) * (targetStop - targetStart);
 }
 
-const lerp = (start: number, stop: number, amt: number) => {
+/**
+ * Linear interpolation between two values.
+ * @param start - Start value
+ * @param stop - End value
+ * @param amt - Interpolation amount (0 to 1)
+ */
+const lerp = (start: number, stop: number, amt: number): number => {
   return amt * (stop - start) + start;
 }
 
 const mix = lerp;
+
+/**
+ * Inverse linear interpolation - returns where a value falls between two bounds.
+ * @returns Value between 0 and 1 (or outside if value is outside bounds)
+ * @example inverseLerp(0, 100, 50) // returns 0.5
+ */
+const inverseLerp = (start: number, stop: number, value: number): number => {
+  return (value - start) / (stop - start);
+}
+
+/**
+ * Remaps a value from one range to another (combines inverseLerp and lerp).
+ * @example remap(50, 0, 100, 0, 1) // returns 0.5
+ */
+const remap = (value: number, inStart: number, inStop: number, outStart: number, outStop: number): number => {
+  return lerp(outStart, outStop, inverseLerp(inStart, inStop, value));
+}
 
 const dist = (ax: number, ay: number, bx: number, by: number) => {
   return Math.sqrt(Math.pow((ax - bx), 2) + Math.pow((ay - by), 2));
@@ -139,25 +183,102 @@ const pickRandomFromArray = <T>(arr: T[],splice=false) => {
   return arr[rnd];
 }
 
-const fract = (x: number) => {
+/**
+ * Returns the fractional part of a number.
+ * @example fract(3.7) // returns 0.7
+ */
+const fract = (x: number): number => {
   return x - Math.floor(x);
 }
-const clamp = (x: number, min = 0, max = 1) => {
+
+/**
+ * Clamps a value between min and max.
+ */
+const clamp = (x: number, min: number = 0, max: number = 1): number => {
   return Math.min(max, Math.max(x, min));
 }
 
-const modWrap = (x: number, min = 0, max = 1) => {
-    return (x+(max-min)) % (max - min) + min;
+/**
+ * Clamps a value between 0 and 1.
+ * @example saturate(1.5) // returns 1
+ */
+const saturate = (x: number): number => {
+  return clamp(x, 0, 1);
+}
+
+/**
+ * Step function - returns 0 if x < edge, else 1.
+ * @example step(0.5, 0.3) // returns 0
+ * @example step(0.5, 0.7) // returns 1
+ */
+const step = (edge: number, x: number): number => {
+  return x < edge ? 0 : 1;
+}
+
+/**
+ * PingPong - bounces value back and forth within length.
+ * @example pingPong(2.5, 2) // returns 1.5
+ * @example pingPong(3.5, 2) // returns 0.5
+ */
+const pingPong = (t: number, length: number): number => {
+  const t2 = t % (length * 2);
+  return length - Math.abs(t2 - length);
+}
+
+/**
+ * Wraps a value within a range (like modulo but works with negative numbers).
+ */
+const modWrap = (x: number, min: number = 0, max: number = 1): number => {
+  const range = max - min;
+  return ((((x - min) % range) + range) % range) + min;
+}
+
+/**
+ * Checks if two floats are approximately equal within epsilon.
+ * @example approximately(0.1 + 0.2, 0.3) // returns true
+ */
+const approximately = (a: number, b: number, epsilon: number = 0.00001): number => {
+  return Math.abs(a - b) < epsilon ? 1 : 0;
+}
+
+/**
+ * Checks if two floats are approximately equal (returns boolean).
+ */
+const approxEqual = (a: number, b: number, epsilon: number = 0.00001): boolean => {
+  return Math.abs(a - b) < epsilon;
 }
 
 
-const smoothstep = (edge0: number, edge1: number, x: number) => {
+/**
+ * Smooth Hermite interpolation between 0 and 1.
+ * @param edge0 - Lower edge
+ * @param edge1 - Upper edge
+ * @param x - Value to interpolate
+ * @returns Smoothly interpolated value between 0 and 1
+ */
+const smoothstep = (edge0: number, edge1: number, x: number): number => {
   const t = clamp((x - edge0) / (edge1 - edge0), 0, 1);
   return t * t * (3 - 2 * t);
 }
-const quinticinterpol = (edge0: number, edge1: number, x0: number) => {
+
+/**
+ * Quintic interpolation - smoother than smoothstep (zero first and second derivatives at edges).
+ */
+const quinticinterpol = (edge0: number, edge1: number, x0: number): number => {
   const x = clamp((x0 - edge0) / (edge1 - edge0), 0, 1);
   return x * x * x * (x * (x * 6 - 15) + 10);
+}
+
+/**
+ * Attempt to smoothly interpolate with a controllable smoothness parameter.
+ * @param edge0 - Lower edge
+ * @param edge1 - Upper edge
+ * @param x - Value to interpolate
+ * @param k - Smoothness factor (higher = sharper transition)
+ */
+const smootherstep = (edge0: number, edge1: number, x: number): number => {
+  const t = clamp((x - edge0) / (edge1 - edge0), 0, 1);
+  return t * t * t * (t * (t * 6 - 15) + 10);
 }
 
 
@@ -210,11 +331,12 @@ const randomWeightedFromArray = <T>(arr:{value:T,prob:number,start?: number, end
 
 }
 
-const swapVals = (a:number,b:number) => {
-  let temp = b;
-  b = a;
-  a = temp;
-  return []
+/**
+ * Swaps two values and returns them as a tuple [b, a].
+ * Usage: const [newA, newB] = swapVals(a, b);
+ */
+const swapVals = <T>(a: T, b: T): [T, T] => {
+  return [b, a];
 }
 
 
@@ -232,47 +354,107 @@ function sawTooth(_x:number, A:number) {
   }
 }
 
-function make2dSquareArray(MAP_DIMENSION: number) {
-  let map3d: any[][] = [];
-  for (let iy = 0; iy < MAP_DIMENSION; iy++) {
-    let row: number[] = [];
-    for (let ix = 0; ix < MAP_DIMENSION; ix++) {
-      row.push(0);
-    }
-    map3d.push(row);
-  }
-  return map3d;
+/**
+ * Creates a 2D square array filled with a default value.
+ * @param size - Dimension of the square array
+ * @param defaultValue - Value to fill (default: 0)
+ */
+function make2dSquareArray<T = number>(size: number, defaultValue: T = 0 as T): T[][] {
+  return make2dArray(size, size, defaultValue);
 }
 
-function make2dArray(MAP_DIMENSION_Y: number,MAP_DIMENSION_X: number) {
-  let map3d: any[][] = [];
-  for (let iy = 0; iy < MAP_DIMENSION_Y; iy++) {
-    let row: number[] = [];
-    for (let ix = 0; ix < MAP_DIMENSION_X; ix++) {
-      row.push(0);
+/**
+ * Creates a 2D array filled with a default value.
+ * @param rows - Number of rows
+ * @param cols - Number of columns
+ * @param defaultValue - Value to fill (default: 0)
+ */
+function make2dArray<T = number>(rows: number, cols: number, defaultValue: T = 0 as T): T[][] {
+  const arr: T[][] = [];
+  for (let y = 0; y < rows; y++) {
+    const row: T[] = [];
+    for (let x = 0; x < cols; x++) {
+      row.push(defaultValue);
     }
-    map3d.push(row);
+    arr.push(row);
   }
-  return map3d;
+  return arr;
 }
 
 
-function shuffleArray(array:any[]) {
+/**
+ * Shuffles an array in place using Fisher-Yates algorithm.
+ * @returns The same array, shuffled
+ */
+function shuffleArray<T>(array: T[]): T[] {
   let currentIndex = array.length, randomIndex;
 
-  // While there remain elements to shuffle...
   while (currentIndex !== 0) {
-
-    // Pick a remaining element...
     randomIndex = Math.floor(RND() * currentIndex);
     currentIndex--;
-
-    // And swap it with the current element.
     [array[currentIndex], array[randomIndex]] = [
       array[randomIndex], array[currentIndex]];
   }
 
   return array;
+}
+
+/**
+ * Returns a new shuffled copy of an array (doesn't mutate original).
+ */
+function shuffledCopy<T>(array: T[]): T[] {
+  return shuffleArray([...array]);
+}
+
+/**
+ * Returns the last element of an array.
+ */
+function last<T>(array: T[]): T | undefined {
+  return array[array.length - 1];
+}
+
+/**
+ * Returns the first element of an array.
+ */
+function first<T>(array: T[]): T | undefined {
+  return array[0];
+}
+
+/**
+ * Creates an array of numbers from start to end (exclusive).
+ * @example range(0, 5) // [0, 1, 2, 3, 4]
+ * @example range(5) // [0, 1, 2, 3, 4]
+ */
+function range(startOrEnd: number, end?: number, step: number = 1): number[] {
+  const start = end === undefined ? 0 : startOrEnd;
+  const stop = end === undefined ? startOrEnd : end;
+  const result: number[] = [];
+
+  if (step > 0) {
+    for (let i = start; i < stop; i += step) {
+      result.push(i);
+    }
+  } else if (step < 0) {
+    for (let i = start; i > stop; i += step) {
+      result.push(i);
+    }
+  }
+
+  return result;
+}
+
+/**
+ * Sums all numbers in an array.
+ */
+function sum(array: number[]): number {
+  return array.reduce((a, b) => a + b, 0);
+}
+
+/**
+ * Returns the average of all numbers in an array.
+ */
+function average(array: number[]): number {
+  return array.length === 0 ? 0 : sum(array) / array.length;
 }
 
 function debounce<T extends (...args: any[]) => void>(func: T, delay: number): T {
@@ -284,10 +466,59 @@ function debounce<T extends (...args: any[]) => void>(func: T, delay: number): T
 }
 
 
-export {resetRNDHASH, map, lerp, mix, dist, rnd,RND, random2, fract, 
-  clamp, smoothstep,quinticinterpol, weightedRandomLn, pickRandomFromArray, pickRandom,
-  createPseudoPoissonDistribution,randomWeightedFromArray,
-  PI,PI2,log,sin,cos,tan,atan2,atan,random,floor,ceil,sqrt,swapVals,round,exp,pow,rndInt,isEven,rand_box_muller,
-    sawTooth,make2dArray,make2dSquareArray,modWrap,shuffleArray,makeFibonacci,debounce
+// ============================================================================
+// EXPORTS
+// ============================================================================
+
+export {
+  // Constants
+  PI, PI2, TAU, HALF_PI,
+  GOLDENRATIO,
+  DEG2RAD, RAD2DEG,
+
+  // Math functions from Math object
+  log, sin, cos, tan, atan, atan2,
+  random, floor, ceil, sqrt, round, exp, pow,
+  abs, sign, min, max,
+
+  // Angle conversion
+  degToRad, radToDeg,
+
+  // Interpolation & mapping
+  lerp, mix, inverseLerp, remap, map,
+  smoothstep, smootherstep, quinticinterpol,
+
+  // Clamping & wrapping
+  clamp, saturate, fract, modWrap,
+  step, pingPong,
+
+  // Comparison
+  approximately, approxEqual,
+
+  // Distance
+  dist,
+
+  // Random
+  rnd, rndInt, RND, resetRNDHASH,
+  random2, rand_box_muller,
+  weightedRandomLn,
+  pickRandom, pickRandomFromArray,
+  randomWeightedFromArray,
+
+  // Arrays
+  make2dArray, make2dSquareArray,
+  shuffleArray, shuffledCopy,
+  range, sum, average,
+  first, last,
+  swapVals,
+
+  // Sequences
+  makeFibonacci,
+
+  // Distributions
+  createPseudoPoissonDistribution,
+
+  // Utilities
+  isEven, sawTooth, debounce
 }
 

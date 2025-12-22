@@ -1,12 +1,19 @@
+import { IVec2 } from "./vec2core";
 declare const _v2: (x: number, y: number) => _V2;
 declare class _V2 {
     readonly x: number;
     readonly y: number;
     /**
+     * Creates a new immutable 2D vector.
+     * @param {number} x - The X-coordinate.
+     * @param {number} y - The Y-coordinate.
+     */
+    constructor(x: number, y: number);
+    /**
      * Creates a vector from point A to point B.
-     * @param {V2} a - The starting point.
-     * @param {V2} b - The ending point.
-     * @returns {V2} The resulting vector.
+     * @param {_V2} a - The starting point.
+     * @param {_V2} b - The ending point.
+     * @returns {_V2} The resulting vector.
      */
     static fromTo(a: _V2, b: _V2): _V2;
     /**
@@ -28,13 +35,10 @@ declare class _V2 {
     /**
      * Checks if a point is inside a polygon.
      * @param {_V2} p - The point to check.
-     * @param {_V2[]} polygon - An array of vectors defining the polygon.
+     * @param {IVec2[]} polygon - An array of vectors defining the polygon.
      * @returns {boolean} `true` if the point is inside, otherwise `false`.
      */
-    static isPointInPolygon(p: _V2, polygon: {
-        x: number;
-        y: number;
-    }[]): boolean;
+    static isPointInPolygon(p: _V2, polygon: IVec2[]): boolean;
     /**
      * Creates a new 2D vector.
      * @param {number} x - The X-coordinate.
@@ -205,12 +209,6 @@ declare class _V2 {
      * @returns {_V2} The interpolated vector.
      */
     static lerp(v1: _V2, v2: _V2, amt: number): _V2;
-    /**
-     * Creates a new immutable 2D vector.
-     * @param {number} x - The X-coordinate.
-     * @param {number} y - The Y-coordinate.
-     */
-    constructor(x: number, y: number);
     /**
      * Creates a new vector with the same values.
      * @returns {_V2} A new copy of this vector.
